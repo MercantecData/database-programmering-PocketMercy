@@ -12,13 +12,13 @@ session_start();
 			  <input type="text" name="kode"><br>
 			  <input type="submit" name="submit" value="Login">
 		</form>
-		<button><a href="Signup.html">Signup</a></button>
+		<button><a href="Signup.php">Signup</a></button>
 	</body>
 </html>
 <?php
 	include("connect_mysql.php");
 	
-	if ($_POST["submit"])
+	if (isset($_POST["submit"]))
 	{
 		$brugernavn = htmlentities($_POST["brugernavn"]);
 		$kode = htmlentities($_POST["kode"]);
