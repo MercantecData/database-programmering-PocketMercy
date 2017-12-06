@@ -23,6 +23,10 @@ session_start();
 		$brugernavn = htmlentities($_POST["brugernavn"]);
 		$kode = htmlentities($_POST["kode"]);
 		
+		unset($_POST["submit"]);
+		unset($_POST["brugernavn"]);
+		unset($_POST["kode"]);
+		
 		if ($stmt = $mysqli->prepare("SELECT id FROM accounts WHERE brugernavn=?, kode=? LIMIT 1"))
 		{
 			$stmt->bind_param("ss", $brugernavn, $kode);
