@@ -27,13 +27,13 @@ session_start();
 		unset($_POST["brugernavn"]);
 		unset($_POST["kode"]);
 		
-		if ($stmt = $conn->prepare("SELECT id FROM accounts WHERE brugernavn=?, kode=? LIMIT 1"))
+		if ($stmt = $conn->prepare("SELECT id FROM accounts WHERE (brugernavn=?) AND (kode=?)"))
 		{
 			$stmt->bind_param("ss", $brugernavn, $kode);
 			$stmt->execute();
 			$stmt->bind_result($_SESSION["login_id"]);
-			header("Velkommen.php");
 			$stmt->fetch();
+			header("Velkommen.php");
 			$stmt->close();
 			
 		}else{
