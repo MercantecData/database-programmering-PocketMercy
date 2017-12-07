@@ -6,7 +6,6 @@ session_start();
 	</head>
 	<body>
 		<form method="post">
-			<?php if(isset($error)){ echo "<p style='color: red;'>Error: ".$error."</p><br>";}?>
 			Brugernavn:<br>
 			<input type="text" name="brugernavn"><br>
 			Kode:<br>
@@ -30,14 +29,14 @@ if(isset($_POST["submit"]))
 	unset($_POST["check_kode"]);
 	unset($_POST["submit"]);
 	
-	$sql = "SELECT * FROM accounts WHERE brugernavn=".$brugernavn."";
+	$sql = "SELECT brugernavn FROM accounts WHERE brugernavn='".$brugernavn."'";
 	$result = $conn->query($sql);
-
-	if ($result->num_rows = 0)
+	
+	if ($result == NULL)
 	{
-		if($kode = $check_kode)
+		if($kode == $check_kode)
 		{
-			if($stmt->prepare("INSERT INTO accounts (brugernavn, kode) VALUES(?,?)"))
+			if($stmt = $conn->prepare("INSERT INTO accounts (brugernavn, kode) VALUES (?, ?)"))
 			{
 				$stmt->bind_param("ss", $brugernavn, $kode);
 				
@@ -48,15 +47,15 @@ if(isset($_POST["submit"]))
 				$stmt->close();
 			}
 			else{
-				$error = "Could not prepare sql statement";
+				echo "Could not prepare sql statement";
 			}
 		}
 		else{
-			$error = "Kode og Gentag Kode er ikke ens";
+			echo "Kode og Gentag Kode er ikke ens";
 		}
 	}
 	else{
-		$error = "Brugernavn er alerede taget";
+		echo "Brugernavn er alerede taget";
 	}
 }
 ?>

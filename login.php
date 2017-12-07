@@ -6,11 +6,11 @@ session_start();
 	</head>
 	<body>
 		<form method="post">
-			  Brugernavn:<br>
-			  <input type="text" name="brugernavn"><br>
-			  Kode:<br>
-			  <input type="text" name="kode"><br>
-			  <input type="submit" name="submit" value="Login">
+			Brugernavn:<br>
+			<input type="text" name="brugernavn"><br>
+			Kode:<br>
+			<input type="text" name="kode"><br>
+			<input type="submit" name="submit" value="Login">
 		</form>
 		<button><a href="Signup.php">Signup</a></button>
 	</body>
@@ -27,15 +27,17 @@ session_start();
 		unset($_POST["brugernavn"]);
 		unset($_POST["kode"]);
 		
-		if ($stmt = $mysqli->prepare("SELECT id FROM accounts WHERE brugernavn=?, kode=? LIMIT 1"))
+		if ($stmt = $conn->prepare("SELECT id FROM accounts WHERE brugernavn=?, kode=? LIMIT 1"))
 		{
 			$stmt->bind_param("ss", $brugernavn, $kode);
 			$stmt->execute();
 			$stmt->bind_result($_SESSION["login_id"]);
+			header("Velkommen.php");
 			$stmt->fetch();
 			$stmt->close();
 			
-			header("Velkommen.php");
+		}else{
+			echo "Could not prepare sql statement";
 		}
 	}
 ?>
