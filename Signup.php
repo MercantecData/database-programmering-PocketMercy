@@ -32,19 +32,16 @@ if(isset($_POST["submit"]))
 	$sql = "SELECT brugernavn FROM accounts WHERE brugernavn='".$brugernavn."'";
 	$result = $conn->query($sql);
 	
-	if ($result == NULL)
+	if ($result->num_rows == 0)
 	{
 		if($kode == $check_kode)
 		{
 			if($stmt = $conn->prepare("INSERT INTO accounts (brugernavn, kode) VALUES (?, ?)"))
 			{
 				$stmt->bind_param("ss", $brugernavn, $kode);
-				
-				if($stmt->execute())
-				{
-					header("login.php");
-				}
+				$stmt->execute();
 				$stmt->close();
+				header("login.php");
 			}
 			else{
 				echo "Could not prepare sql statement";
