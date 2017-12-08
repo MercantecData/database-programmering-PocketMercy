@@ -14,14 +14,13 @@ session_start();
 				include("connect_mysql.php");
 				if (isset($_SESSION["login_id"]))
 				{
-					$stmt = $mysqli->prepare("SELECT brugernavn FROM accounts WHERE id=? LIMIT 1");
+					$stmt = $conn->prepare("SELECT brugernavn FROM accounts WHERE id=? LIMIT 1");
 					$stmt->bind_param("i", $_SESSION["login_id"]);
 					$stmt->execute();
 					$stmt->bind_result($bruger);
 					$stmt->fetch();
 					$stmt->close();
-					
-					echo "<p>Loged in as ".$bruger."</p>";
+					echo "<p>Loged in as ".$bruger."</p><a href='Logout.php'>Logout?</a>";
 				}
 				else
 				{
