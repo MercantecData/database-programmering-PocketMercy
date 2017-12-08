@@ -16,28 +16,29 @@ session_start();
 	</body>
 </html>
 <?php
-	include("connect_mysql.php");
+include("connect_mysql.php");
 	
-	if (isset($_POST["submit"]))
+if (isset($_POST["submit"]))
+{
+	$brugernavn = htmlentities($_POST["brugernavn"]);
+	$kode = htmlentities($_POST["kode"]);
+	
+	unset($_POST["submit"]);
+	unset($_POST["brugernavn"]);
+	unset($_POST["kode"]);
+	
+	if ($stmt = $conn->prepare("SELECT id FROM accounts WHERE (brugernavn=?) AND (kode=?)"))
 	{
-		$brugernavn = htmlentities($_POST["brugernavn"]);
-		$kode = htmlentities($_POST["kode"]);
+		$stmt->bind_param("ss", $brugernavn, $kode);
+		$stmt->execute();
+		$stmt->bind_result($_SESSION["login_id"]);
+		$stmt->fetch();
+		$stmt->close();
 		
-		unset($_POST["submit"]);
-		unset($_POST["brugernavn"]);
-		unset($_POST["kode"]);
-		
-		if ($stmt = $conn->prepare("SELECT id FROM accounts WHERE (brugernavn=?) AND (kode=?)"))
-		{
-			$stmt->bind_param("ss", $brugernavn, $kode);
-			$stmt->execute();
-			$stmt->bind_result($_SESSION["login_id"]);
-			$stmt->fetch();
-			header("Velkommen.php");
-			$stmt->close();
-			
-		}else{
-			echo "Could not prepare sql statement";
-		}
+		header("Location: Velkommen.php");
 	}
+	else{
+		echo "Could not prepare sql statement";
+	}
+}
 ?>
